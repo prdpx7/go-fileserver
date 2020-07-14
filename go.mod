@@ -1,3 +1,3 @@
-module github.com/prdpx7/fs-server
+module github.com/prdpx7/go-fileserver
 
 go 1.14

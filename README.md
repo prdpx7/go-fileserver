@@ -1,6 +1,14 @@
 # go-fileserver
 > A simple HTTP server to share files over same wifi via QRCode
 
+# Installation
+```
+git clone https://github.com/prdpx7/go-fileserver
+cd go-fileserver/fs-server
+go build
+# now just run the binary
+./fs-server
+```
 # Usage
 ```
 fs-server - A simple HTTP Server to share files on a network.

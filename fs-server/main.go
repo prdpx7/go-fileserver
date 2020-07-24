@@ -6,6 +6,7 @@ import (
 
 	fileserver "github.com/prdpx7/go-fileserver"
 	utils "github.com/prdpx7/go-fileserver/utils"
+	qrcode "github.com/skip2/go-qrcode"
 )
 
 //
@@ -22,6 +23,10 @@ func main() {
 	if localIP != nil {
 		url := fmt.Sprintf("http://%s:%d\n", localIP, PORT)
 		fmt.Printf(url)
+		qr, _ := qrcode.New(url, qrcode.High)
+		// qr.DisableBorder = true
+		art := qr.ToString(false)
+		fmt.Println(art)
 	}
 
 	fs := fileserver.CustomFileServer(http.Dir(dirpath))

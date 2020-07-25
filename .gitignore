@@ -29,3 +29,8 @@ _testmain.go
 
 # external packages folder
 vendor/
+
+MD5SUMS
+SHA512SUMS
+*.tar.gz
+fs-server/fs-server

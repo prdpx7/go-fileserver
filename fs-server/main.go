@@ -25,8 +25,7 @@ func main() {
 		fmt.Printf(url)
 		qr, _ := qrcode.New(url, qrcode.High)
 		// qr.DisableBorder = true
-		art := qr.ToString(false)
-		fmt.Println(art)
+		fmt.Println(qr.ToSmallString(false))
 	}
 
 	fs := fileserver.CustomFileServer(http.Dir(dirpath))

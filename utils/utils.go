@@ -29,7 +29,7 @@ func isDirectoryExists(path string) bool {
 }
 
 func showUsage() {
-	helpMessage := `fs-server - A simple HTTP Server to share files on a network.
+	helpMessage := `fs-server - A simple HTTP Server to share files on a network via QRCode.
 Usage: fs-server [OPTIONS] <dir-path>
 Options:
 	-h | --help - show this message
@@ -87,3 +87,39 @@ func GetHumanReadableSize(f os.FileInfo) string{
 	mb := float32(bytes)/(1024.0*1024.0)
 	return fmt.Sprintf("%.2f MB",mb)
 }
+
+//DirListTemplateHTML to be used as index.html for redering DirectoryList
+var DirListTemplateHTML = `
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+	<title>Index of /</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/file-icon-vectors@1.0.0/dist/file-icon-classic.min.css" />
+	<style type="text/css">td.icon-parent { height: 16px; width: 16px; }
+
+	td.file-size { text-align: right; padding-left: 1em; white-space:nowrap;}
+	td.display-name { padding-left: 1.5em; }
+
+	</style>	
+	</head>
+  <body>
+  <h1>Index of {{.DirName}}</h1>
+  <table>
+	<!-- <tr><th>Type</th><th>Size</th><th>Name</th></tr> -->
+  
+	  {{range .Files}}
+	  <tr>
+		  <td class="icon-parent">
+			  <i class="fiv-cla fiv-icon-{{.Extension}}"></i>
+		  </td>
+		  <td class="file-size"><code>{{.Size}}</code></td>
+		  <td class="display-name"><a href="{{.URL}}">{{.Name}}</a></td>
+	  </tr>
+	  {{end}}
+  </table>
+  
+  <br><address style="font-size: 1.2em;"><a href="https://github.com/prdpx7/go-fileserver"><strong>fs-server</strong></a> running @ {{.IPAddr}}</address>
+  </body></html>
+`

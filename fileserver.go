@@ -20,6 +20,7 @@ type customFileHandler struct {
 	root http.FileSystem
 }
 
+//CustomFileServer ...
 func CustomFileServer(root http.FileSystem) http.Handler {
 	return &customFileHandler{root}
 }
@@ -31,11 +32,11 @@ func (cf *customFileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		r.URL.Path = upath
 	}
 
-	ServeFile(w, r, cf.root, path.Clean(upath), true)
+	ServeFile(w, r, cf.root, path.Clean(upath), true, "")
 }
 
 // ServeFile ...
-func ServeFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name string, redirect bool) {
+func ServeFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name string, redirect bool, templateName string) {
 	f, err := fs.Open(name)
 	if err != nil {
 		msg, code := toHTTPError(err)
@@ -50,8 +51,9 @@ func ServeFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name 
 		http.Error(w, msg, code)
 		return
 	}
+
 	if d.IsDir() {
-		ListDirectory(w, r, f, "index")
+		ListDirectory(w, r, f, templateName)
 		return
 	}
 	http.ServeContent(w, r, d.Name(), d.ModTime(), f)
@@ -67,6 +69,7 @@ func toHTTPError(err error) (msg string, httpStatus int) {
 	// Default:
 	return "500 Internal Server Error", http.StatusInternalServerError
 }
+
 
 //ListDirectory render directory content in templateName.html
 func ListDirectory(w http.ResponseWriter, r *http.Request, f http.File, templateName string) {
@@ -90,7 +93,7 @@ func ListDirectory(w http.ResponseWriter, r *http.Request, f http.File, template
 		fileExtension := "page"
 		if d.IsDir() {
 			name += "/"
-			fileExtension = "directory"
+			fileExtension = "folder"
 		} else if len(filepath.Ext(name)) > 1 {
 			fileExtension = filepath.Ext(name)[1:]
 		}
@@ -119,7 +122,18 @@ type FileContent struct {
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
-	t, err := template.ParseFiles(tmpl + ".html")
+	var t *template.Template
+	var err error
+	// use default rendering html
+	if len(tmpl) == 0 {
+		t = template.New("index")
+		t, err = t.Parse(utils.DirListTemplateHTML)
+	} else {
+		templatePath, _ := filepath.Abs(tmpl + ".html")
+		fmt.Println("template path", templatePath)
+		t, err = template.ParseFiles(templatePath)
+	}
+
 	if err != nil {
 		fmt.Println("Error in parsing template ",err)
 		panic(err)
@@ -127,7 +141,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	t.Execute(w, data)
 }
 
-//RequestLogger
+//RequestLogger ...
 func RequestLogger(handler http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		log.Printf("%s %s %s\n", r.RemoteAddr, r.Method, r.URL)

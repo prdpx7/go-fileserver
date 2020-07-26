@@ -29,7 +29,7 @@ _testmain.go
 
 # external packages folder
 vendor/
-
+*.gif
 MD5SUMS
 SHA512SUMS
 *.tar.gz

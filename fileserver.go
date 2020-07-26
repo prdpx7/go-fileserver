@@ -15,7 +15,6 @@ import (
 	utils "github.com/prdpx7/go-fileserver/utils"
 )
 
-
 type customFileHandler struct {
 	root http.FileSystem
 }
@@ -69,7 +68,6 @@ func toHTTPError(err error) (msg string, httpStatus int) {
 	// Default:
 	return "500 Internal Server Error", http.StatusInternalServerError
 }
-
 
 //ListDirectory render directory content in templateName.html
 func ListDirectory(w http.ResponseWriter, r *http.Request, f http.File, templateName string) {
@@ -135,7 +133,7 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	}
 
 	if err != nil {
-		fmt.Println("Error in parsing template ",err)
+		fmt.Println("Error in parsing template ", err)
 		panic(err)
 	}
 	t.Execute(w, data)
@@ -148,5 +146,3 @@ func RequestLogger(handler http.Handler) http.Handler {
 		handler.ServeHTTP(w, r)
 	})
 }
-
-

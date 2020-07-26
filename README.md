@@ -1,5 +1,5 @@
 # go-fileserver
-> A simple HTTP file server to share files over WiFi via QRCode
+> A simple HTTP server to share files over WiFi via QRCode
 
 # Installation
 * You can download compressed version from [releases](https://github.com/prdpx7/go-fileserver/releases)
@@ -38,13 +38,13 @@ fs-server /home/user/documents/ - serve files from given directory
 # Demo
 
 ### Step 1 - Run in terminal
-<img src ="./fs-server_cli.gif" width=800 height=500>
+<img src ="https://i.imgur.com/ywUaM08.gif" width=800 height=450>
 
 ### Step 2 - Scan QRCode on Phone
-<img src="./fs-server_mobile.gif" width=350 height=700>
+<img src="https://i.imgur.com/pIlaFol.gif" width=350 height=700>
 
 # Inspiration
 * Inspired from [http-server](https://github.com/http-party/http-server) project
 
-# Licence
+# License
 * MIT

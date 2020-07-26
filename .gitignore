@@ -33,4 +33,5 @@ vendor/
 MD5SUMS
 SHA512SUMS
 *.tar.gz
-fs-server/fs-server
+*./fs-server
+!fs-server/

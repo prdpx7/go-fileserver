@@ -10,6 +10,17 @@ import (
 
 // GetLocalIP i.e. 192.168.X.Y ~ your local private IP
 func GetLocalIP() net.IP {
+    addrs, _ := net.InterfaceAddrs()
+	for _, a := range addrs {
+		if ipnet, ok := a.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				return ipnet.IP
+			}
+		}
+	}
+    /*
+    // Not properly working where multiple network interfaces are enabled
+
 	host, _ := os.Hostname()
 	addrs, _ := net.LookupIP(host)
 	for _, addr := range addrs {
@@ -17,7 +28,8 @@ func GetLocalIP() net.IP {
 			return ipv4
 		}
 	}
-	return nil
+	*/
+    return nil
 }
 
 func isDirectoryExists(path string) bool {
